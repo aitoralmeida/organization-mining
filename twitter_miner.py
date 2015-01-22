@@ -16,6 +16,8 @@ USER_TOKEN = ''
 USER_SECRET = ''
 
 CONFIG_FILEPATH = './confs/twitter.json'
+MAX_NON_EMPLOYEES_PROCESSED = 1000
+MIN_PRIORITY = 1
 
 config = json.load(open(CONFIG_FILEPATH, 'r'))
 CONSUMER_KEY = config['CONSUMER_KEY']
@@ -38,14 +40,18 @@ def _get_relations(id_str):
     
     return relations
     
-def _get_description(id_str):
+def _get__name_description(id_str):
     user = api.get_user(id_str)
-    return user.description
+    return user.screen_name, user.description
     
 def _initialize_queue(ids):
     queue = {}
     for id_str in ids:
-        queue[id_str] = 1
+        # version 1
+        #queue[id_str] = 1
+        
+        # version 2
+        queue[id_str] = 10
         
     return queue
         
@@ -69,22 +75,40 @@ def crawl_organization(id_seeds, keywords):
     collected_ids = {}
     
     # 0- Initialize
+    # queue of ids to be processed
     queue = _initialize_queue(id_seeds)
+    # ids already processed
     crawled_ids = []
-    while len(queue > 0):
+    
+    # version 2
+    # keeps tracks of how many non-employees have been processed since the last
+    # discovered employees
+    accum_non_employee = 0    
+    
+    # version 1
+    # while len(queue > 0):
+        
+    # version 2
+    while (accum_non_employee < MAX_NON_EMPLOYEES_PROCESSED):
         # 1- dequeue
         sorted_queue = _short_queue(queue)
         id_to_process = sorted_queue[-1][0]
+        priority = id_to_process = sorted_queue[-1][1]
+        # version 2
+        if priority <= MIN_PRIORITY:
+            break
         queue.pop(id_to_process)
         # 2- Add to crawled
         crawled_ids.append[id_to_process]
         # 3- check description
-        description = _get_description(id_to_process)
+        screen_name, description = _get__name_description(id_to_process)
         has_keyword = _check_for_keywords(description, keywords)
         if has_keyword:
+            #version 2
+            accum_non_employee = 0 
             # 4- get new ids to crawl
             relations = _get_relations(id_to_process)
-            collected_ids[id_to_process] = {'friends' : relations['friends'],'followers' : relations['followers']}
+            collected_ids[id_to_process] = {'screen_name': screen_name, 'friends' : relations['friends'],'followers' : relations['followers']}
             unfiltered_relations = set(relations['friends'] + relations['followers'])
             new_ids = [id_str for id_str in unfiltered_relations if id_str not in crawled_ids]
             # 5- increase priority
@@ -95,12 +119,16 @@ def crawl_organization(id_seeds, keywords):
             for id_str in new_ids:
                 if not id_str in queue:
                     queue[id_str] = 1
+        else:
+            # version 2
+            accum_non_employee += 1
                     
     return collected_ids
     
 def build_graph(collected_ids):
     G = nx.DiGraph()
     for user in collected_ids:
+        G.add_node(screen_name = collected_ids[user]['screen_name'])
         friends = collected_ids[user]['friends']        
         for friend in friends:
             if friend in collected_ids:
@@ -111,10 +139,9 @@ def build_graph(collected_ids):
             if follower in friends:
                 G.add_edge(follower, user)
                 
+                
     return G
-    
-        
-        
+
         
     
     
