@@ -13,6 +13,7 @@ import networkx as nx
 import json
 import operator
 import time
+import sys
 
 CONSUMER_KEY = ''
 CONSUMER_SECRET = ''
@@ -24,7 +25,7 @@ NETWORKS_FILEPATH = './networks/'
 
 MAX_NON_EMPLOYEES_PROCESSED = 1000
 MIN_PRIORITY = 1
-SEED_PRIORITY = 100
+SEED_PRIORITY = 5
 BASE_PRIORITY = 1
 WAIT_MINS = 5
 
@@ -131,9 +132,16 @@ def crawl_organization(id_seeds, keywords):
                 repeat = False
             except tweepy.error.TweepError as e:
                 repeat = True
-                print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
+                print '(%s) Time limut exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
                 print '\t', e
-                time.sleep(WAIT_MINS * 60)
+                sys.stdout.flush()
+                try:
+                    if e.args[0][0]['code'] == 88:
+                        time.sleep(WAIT_MINS * 60)
+                    else:
+                        repeat = False
+                except:
+                        repeat = False
         
         has_keyword = _check_for_keywords(description, keywords)
         #if an id is in the seed it should always be added to the results
@@ -141,6 +149,7 @@ def crawl_organization(id_seeds, keywords):
             print ' - Processing %s with priority %s'% (screen_name, priority)
             print ' - Queue lenght: %s' % len(queue)
             print ' - Mined ids: %s' % len(collected_ids)
+            sys.stdout.flush()
             #version 2
             accum_non_employee = 0 
             # 4- get new ids to crawl
@@ -153,7 +162,14 @@ def crawl_organization(id_seeds, keywords):
                     repeat = True
                     print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
                     print '\t', e
-                    time.sleep(WAIT_MINS * 60)
+                    sys.stdout.flush()
+                    try:
+                        if e.args[0][0]['code'] == 88:
+                            time.sleep(WAIT_MINS * 60)
+                        else:
+                            repeat = False
+                    except:
+                        repeat = False
             
             collected_ids[id_to_process] = {'screen_name': screen_name, 'friends' : relations['friends'],'followers' : relations['followers']}
             unfiltered_relations = set(relations['friends'] + relations['followers'])
