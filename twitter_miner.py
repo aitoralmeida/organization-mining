@@ -26,7 +26,7 @@ MAX_NON_EMPLOYEES_PROCESSED = 1000
 MIN_PRIORITY = 1
 SEED_PRIORITY = 100
 BASE_PRIORITY = 1
-WAIT_MINS = 15
+WAIT_MINS = 5
 
 config = json.load(open(CONFIG_FILEPATH, 'r'))
 CONSUMER_KEY = config['CONSUMER_KEY']
@@ -129,9 +129,10 @@ def crawl_organization(id_seeds, keywords):
             try:
                 screen_name, description = _get__name_description(id_to_process)
                 repeat = False
-            except tweepy.error.TweepError:
+            except tweepy.error.TweepError as e:
                 repeat = True
-                print 'Time limit exceeded. Waiting %s mins' % WAIT_MINS
+                print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
+                print '\t', e
                 time.sleep(WAIT_MINS * 60)
         
         has_keyword = _check_for_keywords(description, keywords)
@@ -148,9 +149,10 @@ def crawl_organization(id_seeds, keywords):
                 try:
                     relations = _get_relations(id_to_process)
                     repeat = False
-                except tweepy.error.TweepError:
+                except tweepy.error.TweepError as e:
                     repeat = True
-                    print 'Time limit exceeded. Waiting %s mins' % WAIT_MINS
+                    print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
+                    print '\t', e
                     time.sleep(WAIT_MINS * 60)
             
             collected_ids[id_to_process] = {'screen_name': screen_name, 'friends' : relations['friends'],'followers' : relations['followers']}
