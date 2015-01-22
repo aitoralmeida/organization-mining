@@ -25,6 +25,7 @@ NETWORKS_FILEPATH = './networks/'
 MAX_NON_EMPLOYEES_PROCESSED = 1000
 MIN_PRIORITY = 1
 SEED_PRIORITY = 100
+BASE_PRIORITY = 1
 WAIT_MINS = 15
 
 config = json.load(open(CONFIG_FILEPATH, 'r'))
@@ -134,7 +135,8 @@ def crawl_organization(id_seeds, keywords):
                 time.sleep(WAIT_MINS * 60)
         
         has_keyword = _check_for_keywords(description, keywords)
-        if has_keyword or id_to_process in id_seeds:
+        #if an id is in the seed it should always be added to the results
+        if has_keyword or (id_to_process in id_seeds):
             print ' - Processing %s with priority %s'% (screen_name, priority)
             print ' - Queue lenght: %s' % len(queue)
             print ' - Mined ids: %s' % len(collected_ids)
@@ -161,10 +163,11 @@ def crawl_organization(id_seeds, keywords):
             # 6- add new ids to queue     
             for id_str in new_ids:
                 if not id_str in queue:
-                    queue[id_str] = 1
+                    queue[id_str] = BASE_PRIORITY
         else:
             # version 2
             accum_non_employee += 1
+            print ' - Accumuluted non-employees: %s' % accum_non_employee
             
         json.dump(collected_ids, open(NETWORKS_FILEPATH + 'collected_ids.json', 'w'), indent=2)
                     
@@ -175,7 +178,7 @@ def crawl_organization(id_seeds, keywords):
 def build_graph(collected_ids):
     G = nx.DiGraph()
     for user in collected_ids:
-        G.add_node(screen_name = collected_ids[user]['screen_name'])
+        G.add_node(user, screen_name = collected_ids[user]['screen_name'])
         friends = collected_ids[user]['friends']        
         for friend in friends:
             if friend in collected_ids:
