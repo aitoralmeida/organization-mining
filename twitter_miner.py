@@ -134,7 +134,7 @@ def crawl_organization(id_seeds, keywords):
                 time.sleep(WAIT_MINS * 60)
         
         has_keyword = _check_for_keywords(description, keywords)
-        if has_keyword:
+        if has_keyword or id_to_process in id_seeds:
             print ' - Processing %s with priority %s'% (screen_name, priority)
             print ' - Queue lenght: %s' % len(queue)
             print ' - Mined ids: %s' % len(collected_ids)
