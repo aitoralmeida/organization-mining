@@ -84,14 +84,16 @@ def _check_for_keywords(description, keywords):
     return has_keyword
     
 def _save_status(collected_ids, queue, crawled_ids):
+    print 'Saving status...'
     json.dump(collected_ids, open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'w'))
     json.dump(queue, open(STATUS_FILEPATH + 'queue_twitter.json', 'w'))
     json.dump(crawled_ids, open(STATUS_FILEPATH + 'crawled_ids_twitter.json', 'w'))
     
-def _load_status():
+def _load_status():    
     collected_ids = json.load(open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'r'))
     queue = json.load(open(STATUS_FILEPATH + 'queue_twitter.json', 'r'))
     crawled_ids = json.load(open(STATUS_FILEPATH + 'crawled_ids_twitter.json', 'r'))
+    print 'Status loaded...'
     
     return collected_ids, queue, crawled_ids
 
@@ -269,6 +271,7 @@ if __name__ == '__main__':
     
     SEED_ID_FILE = 'seed_ids_siemens.json'
     try:
+        print 'Loading ids...'
         id_seeds = json.load(open(SEED_ID_FILE,'r'))
     except:
         print 'Recovering ids...'
