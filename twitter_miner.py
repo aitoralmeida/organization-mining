@@ -77,7 +77,7 @@ def _check_for_keywords(description, keywords):
     has_keyword = False
     
     for word in keywords:
-        if word in description:
+        if word.lower() in description.lower():
             has_keyword = True
             break
         
@@ -252,14 +252,16 @@ if __name__ == '__main__':
                      '@UlrichEberl1', '@Syeda_AaJ', '@TurtonDanielle', '@meterservices', 
                      '@GaryAmosSFS'])
     
-    keywords = set(['Siemens', 'siemens', 'SiemensPLM', 'Siemens_Ptbo', 'SiemensPLM_BNL',
-                'SiemensHealthIT', 'Siemens_Traffic', 'SiemensPLM_DE', 'SiemensPLM_JP', 
-                'Siemens_Ptbo', 'Siemens_DT_US', 'SiemensMobility', 'RollingOnRails', 
-                'SiemensStiftung', 'siemens_salud', 'SiemensII', 'SiemensCampus', 
-                'Siemens_SFS', 'siemens_es', 'SiemensHealth', 'SiemensUSA', 'Siemens_Suomi', 
-                'Siemens_Italia', 'Siemens_Sverige', 'Siemens_Russia', 'Siemens_stampa', 
-                'SiemensinCanada', 'siemens_press', 'Siemens_ARG', 'Siemens_Austria', 
-                'siemensindustry', 'SiemensUKNews', 'SiemensTurkiye', 'Siemens_Brasil'])
+    keywords = ['siemens']
+    
+#    keywords = set(['Siemens', 'siemens', 'SiemensPLM', 'Siemens_Ptbo', 'SiemensPLM_BNL',
+#                'SiemensHealthIT', 'Siemens_Traffic', 'SiemensPLM_DE', 'SiemensPLM_JP', 
+#                'Siemens_Ptbo', 'Siemens_DT_US', 'SiemensMobility', 'RollingOnRails', 
+#                'SiemensStiftung', 'siemens_salud', 'SiemensII', 'SiemensCampus', 
+#                'Siemens_SFS', 'siemens_es', 'SiemensHealth', 'SiemensUSA', 'Siemens_Suomi', 
+#                'Siemens_Italia', 'Siemens_Sverige', 'Siemens_Russia', 'Siemens_stampa', 
+#                'SiemensinCanada', 'siemens_press', 'Siemens_ARG', 'Siemens_Austria', 
+#                'siemensindustry', 'SiemensUKNews', 'SiemensTurkiye', 'Siemens_Brasil'])
                 
 #    print 'Recovering ids...'
 #    id_seeds = get_ids_from_screen_names(account_seeds)
