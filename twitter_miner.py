@@ -123,7 +123,10 @@ def crawl_organization(id_seeds, keywords):
             break
         queue.pop(id_to_process)
         # 2- Add to crawled
-        crawled_ids.append(id_to_process)
+        if id_to_process in crawled_ids:
+            continue
+        else:
+            crawled_ids.append(id_to_process)
         # 3- check description
         repeat = True
         while repeat:
