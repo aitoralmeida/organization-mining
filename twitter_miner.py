@@ -22,6 +22,7 @@ USER_SECRET = ''
 
 CONFIG_FILEPATH = './confs/twitter.json'
 NETWORKS_FILEPATH = './networks/'
+STATUS_FILEPATH = './ongoing_crawls/'
 
 MAX_NON_EMPLOYEES_PROCESSED = 1000
 MIN_PRIORITY = 1
@@ -81,6 +82,18 @@ def _check_for_keywords(description, keywords):
             break
         
     return has_keyword
+    
+def _save_status(collected_ids, queue, crawled_ids):
+    json.dump(collected_ids, open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'w'))
+    json.dump(queue, open(STATUS_FILEPATH + 'queue_twitter.json', 'w'))
+    json.dump(crawled_ids, open(STATUS_FILEPATH + 'crawled_ids_twitter.json', 'w'))
+    
+def _load_status():
+    collected_ids = json.load(open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'r'))
+    queue = json.load(open(STATUS_FILEPATH + 'queue_twitter.json', 'r'))
+    crawled_ids = json.load(open(STATUS_FILEPATH + 'crawled_ids_twitter.json', 'r'))
+    
+    return collected_ids, queue, crawled_ids
 
 def get_ids_from_screen_names(screen_names):
     ids = set()
@@ -93,16 +106,19 @@ def get_ids_from_screen_names(screen_names):
 # Crawls twitter searching for organization X employees. 
 # id_seeds: seed ids to start the search
 # keywords: keywords to look for in the users' descriptions   
-def crawl_organization(id_seeds, keywords):
+def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
     print "Starting crawl for (%s) seeds" % len(id_seeds)
     print "Keywords: %s"% keywords
-    collected_ids = {}
+    print "Already collected ids: %s" % len(collected_ids)
+   
+    #collected_ids = {}
     
     # 0- Initialize
     # queue of ids to be processed
-    queue = _initialize_queue(id_seeds)
+    # already done outside the function
+    #queue = _initialize_queue(id_seeds)
     # ids already processed
-    crawled_ids = []
+    #crawled_ids = []
     
     # version 2
     # keeps tracks of how many non-employees have been processed since the last
@@ -125,8 +141,8 @@ def crawl_organization(id_seeds, keywords):
         # 2- Add to crawled
         if id_to_process in crawled_ids:
             continue
-        else:
-            crawled_ids.append(id_to_process)
+        
+        crawled_ids.append(id_to_process)
         # 3- check description
         repeat = True
         while repeat:
@@ -134,6 +150,7 @@ def crawl_organization(id_seeds, keywords):
                 screen_name, description = _get__name_description(id_to_process)
                 repeat = False
             except tweepy.error.TweepError as e:
+                _save_status(collected_ids, queue, crawled_ids)
                 repeat = True
                 print '(%s) Time limut exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
                 print '\t', e
@@ -162,6 +179,7 @@ def crawl_organization(id_seeds, keywords):
                     relations = _get_relations(id_to_process)
                     repeat = False
                 except tweepy.error.TweepError as e:
+                    _save_status(collected_ids, queue, crawled_ids)
                     repeat = True
                     print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
                     print '\t', e
@@ -245,9 +263,32 @@ if __name__ == '__main__':
 #    id_seeds = get_ids_from_screen_names(account_seeds)
 #    print 'Saving seed ids...'
 #    json.dump(list(id_seeds), open('seed_ids_siemens.json','w'), indent=2)
-    id_seeds = json.load(open('seed_ids_siemens.json','r'))
+
+    
+
+    
+    SEED_ID_FILE = 'seed_ids_siemens.json'
+    try:
+        id_seeds = json.load(open(SEED_ID_FILE,'r'))
+    except:
+        print 'Recovering ids...'
+        id_seeds = get_ids_from_screen_names(account_seeds)
+        print 'Saving seed ids...'
+        json.dump(list(id_seeds), open(SEED_ID_FILE,'w'), indent=2)
+        
+    try:
+        collected_ids, queue, crawled_ids = _load_status()
+    except:
+        collected_ids = {}
+        # 0- Initialize
+        # queue of ids to be processed
+        queue = _initialize_queue(id_seeds)
+        # ids already processed
+        crawled_ids = []
+        
+    
     print 'Crawling twitter...'
-    collected_ids = crawl_organization(id_seeds, keywords)
+    collected_ids = crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids)
     print 'Building graph...'
     G = build_graph(collected_ids)
     print 'Saving graph...'

@@ -54,3 +54,4 @@ docs/_build/
 target/
 
 confs/*.json
+ongoing_crawls/*.*
