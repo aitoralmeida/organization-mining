@@ -203,14 +203,16 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
             collected_ids[id_to_process] = {'screen_name': screen_name, 'friends' : relations['friends'],'followers' : relations['followers']}
             unfiltered_relations = set(relations['friends'] + relations['followers'])
             new_ids = [id_str for id_str in unfiltered_relations if id_str not in crawled_ids]
-            # 5- increase priority
-            for id_str in queue:
-                if id_str in new_ids:
-                    queue[id_str] += 1
-            # 6- add new ids to queue     
+                   
+            print '1'
+            # 5- increase priority & 6- add new ids to queue     
             for id_str in new_ids:
                 if not id_str in queue:
                     queue[id_str] = BASE_PRIORITY
+                else:
+                    queue[id_str] += 1
+            print '2'
+                    
         else:
             # version 2
             accum_non_employee += 1
