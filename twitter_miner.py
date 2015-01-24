@@ -130,8 +130,14 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
     # version 1
     # while len(queue > 0):
         
+    tot = 0
+        
     # version 2
     while (accum_non_employee < MAX_NON_EMPLOYEES_PROCESSED):
+        if tot == 20:
+            _save_status(collected_ids, queue, crawled_ids)
+            tot = 0            
+        tot+=1
         # 1- dequeue
         sorted_queue = _short_queue(queue)
         id_to_process = sorted_queue[-1][0]        
@@ -209,6 +215,7 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
             # version 2
             accum_non_employee += 1
             print ' - Accumuluted non-employees: %s' % accum_non_employee
+            sys.stdout.flush()
             
         json.dump(collected_ids, open(NETWORKS_FILEPATH + 'collected_ids.json', 'w'))
                     
