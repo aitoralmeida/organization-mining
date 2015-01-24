@@ -26,7 +26,7 @@ STATUS_FILEPATH = './ongoing_crawls/'
 
 MAX_NON_EMPLOYEES_PROCESSED = 1000
 MIN_PRIORITY = 1
-SEED_PRIORITY = 5
+SEED_PRIORITY = 15
 BASE_PRIORITY = 1
 WAIT_MINS = 5
 
@@ -210,7 +210,7 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
             accum_non_employee += 1
             print ' - Accumuluted non-employees: %s' % accum_non_employee
             
-        json.dump(collected_ids, open(NETWORKS_FILEPATH + 'collected_ids.json', 'w'), indent=2)
+        json.dump(collected_ids, open(NETWORKS_FILEPATH + 'collected_ids.json', 'w'))
                     
     print 'Crawl finished, number of mined ids: %s' % len(collected_ids)
     return collected_ids
@@ -228,16 +228,14 @@ def build_graph(collected_ids):
         followers = collected_ids[user]['followers']
         for follower in followers:
             if follower in friends:
-                G.add_edge(follower, user)
-                
-                
+                G.add_edge(follower, user)                              
     return G
 
         
 if __name__ == '__main__':
     print 'Starting...'
     #for siemens
-    account_seeds = set(['@MichaelStal', '@darko_anicic', '@geri_revay', '@janinakugel', 
+    account_seeds_siemens = set(['@MichaelStal', '@darko_anicic', '@geri_revay', '@janinakugel', 
                      '@dubey_harishch', '@RosaRiera', '@ericspiegel', '@PauloRStark',
                      '@Krejman', '@Juergen_Maier', '@PekkoL', '@EHelminen', '@KatarinaNurmi1',
                      '@MarkkuKarja', '@Janne_Ohman', '@BrianHolliday01', '@mc_donagh9',
@@ -252,7 +250,45 @@ if __name__ == '__main__':
                      '@UlrichEberl1', '@Syeda_AaJ', '@TurtonDanielle', '@meterservices', 
                      '@GaryAmosSFS'])
     
-    keywords = ['siemens']
+    keywords_siemens = ['siemens']
+    
+    account_seeds_ubisoft = set(['@UbiGabe', '@UbiXander', '@aemond', '@matwillem', 
+                                 '@Harpax', '@borbok', '@BDRAnneLewis', '@Mat_TheDuke', 
+                                 '@Aleissia', '@Alex_Gnn', '@UbiJustin', '@UbiDii', 
+                                 '@WarrenPrice', '@preshing', '@Sabre_FD', '@ChattyDM', 
+                                 '@BagelofDeath', '@GarySteinman', '@Daze_FD', 
+                                 '@pricefilms', '@TheBigWiazowski', '@danhaynow', 
+                                 '@ChaseStraight', '@kkaspar', '@CeeCeePMS', 
+                                 '@pascalblanche', '@VballinChick', '@PaoloPace', 
+                                 '@jamese', '@BangBangClick', '@jedirobb', '@olliecoe', 
+                                 '@N1tch', '@ymyrtil', '@cjnorris', '@jeffsimpsonkh', 
+                                 '@Monobrowser', '@sfry2k', '@UbiNox84', '@NinjaSalatin', 
+                                 '@UbiMiiSTY', '@Teut', '@patrick_plourde', '@bdljuce', 
+                                 '@UbiParadise', '@JFStAmour', '@Jeff_Skalski', 
+                                 '@BUK57', '@Danielle_CE', '@HiJayPosey', '@jgerighty', 
+                                 '@dbed', '@potemkincityend', '@emilegauthier', 
+                                 '@AnnickV', '@MegaMasao', '@e_michon', '@Cristina_garcia', 
+                                 '@_SFalker', '@Mat_Stomp', '@colinj_graham', 
+                                 '@TokyoLuv', '@kmoctezuma', '@lesley_phordtoy', 
+                                 '@pakablog', '@Ubi_Wuigi', '@someUIguy', '@danjohncox', 
+                                 '@Alyatirno', '@MechanicalR', '@l0vetemper', 
+                                 '@davidtherio', '@SpaceTangent', '@fabianv', 
+                                 '@liamwong', '@hholmes79', '@ThomasCurtis', 
+                                 '@tynril', '@UbiJeff', '@MWSeverin', '@olafurw', 
+                                 '@tobiaskoppen', '@R0U3L', '@BobbyAnguelov', 
+                                 '@WBDN', '@mickaelgilabert', '@Effiluna', 
+                                 '@YFanise', '@ennstamatic', '@keithoconor', 
+                                 '@LucienSoulban', '@jmast', '@AggroFrogg', 
+                                 '@Drusticeleague', '@Feloisa', '@PaoloPace', 
+                                 '@thuantta', '@X0phe', '@Mat_TheDuke', '@D_M_Gregory', 
+                                 '@LaurentMalville', '@Brenda_Puebla', '@nachoyague', 
+                                 '@acrocircus', '@GameProjects', '@BillyMatjiunis', 
+                                 '@NitaiB', '@RDansky', '@Doodlez22', '@Harpax', 
+                                 '@fgrimaldi', '@richienieto', '@jamese', 
+                                 '@iCDrums', '@matwillem', '@Fride_rik', '@Doobivoos', 
+                                 '@UbiTish', '@UbiTrent', '@FredGotGame'])
+    
+    keywords_ubisoft = ['ubisoft']
     
 #    keywords = set(['Siemens', 'siemens', 'SiemensPLM', 'Siemens_Ptbo', 'SiemensPLM_BNL',
 #                'SiemensHealthIT', 'Siemens_Traffic', 'SiemensPLM_DE', 'SiemensPLM_JP', 
@@ -268,6 +304,9 @@ if __name__ == '__main__':
 #    print 'Saving seed ids...'
 #    json.dump(list(id_seeds), open('seed_ids_siemens.json','w'), indent=2)
 
+    account_seeds = account_seeds_ubisoft
+    keywords = keywords_ubisoft
+        
     
 
     
