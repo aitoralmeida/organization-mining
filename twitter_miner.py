@@ -88,6 +88,7 @@ def _save_status(collected_ids, queue, crawled_ids):
     json.dump(collected_ids, open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'w'))
     json.dump(queue, open(STATUS_FILEPATH + 'queue_twitter.json', 'w'))
     json.dump(crawled_ids, open(STATUS_FILEPATH + 'crawled_ids_twitter.json', 'w'))
+    print '...saved'
     
 def _load_status():    
     collected_ids = json.load(open(STATUS_FILEPATH + 'collected_ids_twitter.json', 'r'))
