@@ -203,16 +203,13 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
             collected_ids[id_to_process] = {'screen_name': screen_name, 'friends' : relations['friends'],'followers' : relations['followers']}
             unfiltered_relations = set(relations['friends'] + relations['followers'])
             new_ids = [id_str for id_str in unfiltered_relations if id_str not in crawled_ids]
-                   
-            print '1'
+            
             # 5- increase priority & 6- add new ids to queue     
             for id_str in new_ids:
                 if not id_str in queue:
                     queue[id_str] = BASE_PRIORITY
                 else:
                     queue[id_str] += 1
-            print '2'
-                    
         else:
             # version 2
             accum_non_employee += 1
@@ -226,9 +223,15 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
 
 # Builds the graph using the ids collected by crawl_organizations   
 def build_graph(collected_ids):
+    print 'Total collected ids %s' % len(collected_ids)
     G = nx.DiGraph()
+    
+    #create nodes
     for user in collected_ids:
         G.add_node(user, screen_name = collected_ids[user]['screen_name'])
+        
+    #create edges   
+    for user in collected_ids:    
         friends = collected_ids[user]['friends']        
         for friend in friends:
             if friend in collected_ids:
@@ -236,7 +239,7 @@ def build_graph(collected_ids):
                 
         followers = collected_ids[user]['followers']
         for follower in followers:
-            if follower in friends:
+            if follower in collected_ids:
                 G.add_edge(follower, user)                              
     return G
 
