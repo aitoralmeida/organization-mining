@@ -160,7 +160,7 @@ def crawl_organization(id_seeds, keywords, collected_ids, queue, crawled_ids):
             except tweepy.error.TweepError as e:
                 _save_status(collected_ids, queue, crawled_ids)
                 repeat = True
-                print '(%s) Time limut exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
+                print '(%s) Time limit exceeded. Waiting %s mins' % (time.ctime(), WAIT_MINS)
                 print '\t', e
                 sys.stdout.flush()
                 try:
