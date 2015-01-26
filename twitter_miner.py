@@ -24,7 +24,7 @@ CONFIG_FILEPATH = './confs/twitter.json'
 NETWORKS_FILEPATH = './networks/'
 STATUS_FILEPATH = './ongoing_crawls/'
 
-MAX_NON_EMPLOYEES_PROCESSED = 1000
+MAX_NON_EMPLOYEES_PROCESSED = 3000
 MIN_PRIORITY = 1
 SEED_PRIORITY = 15
 BASE_PRIORITY = 1
@@ -102,7 +102,7 @@ def get_ids_from_screen_names(screen_names):
     ids = set()
     for screen_name in screen_names:
         print ' - %s' % screen_name
-        user = api.get_user(screen_name)
+        user = api.get_user(screen_name.strip())
         ids.add(user.id_str)
     return ids    
     
@@ -261,7 +261,25 @@ if __name__ == '__main__':
                      '@stenmic', '@hodike', '@RMFranke', '@SusanCinadr', '@BenjaminSchroed', 
                      '@InesGiovannini1', '@huber_rolf', '@chrisrgh', '@RebeccaOttmann', 
                      '@UlrichEberl1', '@Syeda_AaJ', '@TurtonDanielle', '@meterservices', 
-                     '@GaryAmosSFS'])
+                     '@GaryAmosSFS' , '@MarkSubramaniam', '@AlainIung', '@ospreybev', 
+                     '@AndyDeo', ' @jawalke2', '@JasonNewellNET', '@total_plm', 
+                     '@timegloff', '@AdamWesoly', '@evadinkel', '@ccliffor', 
+                     '@Siemens_PLM_Ru', '@KrisKasprzak', '@Drei_Racker', '@rhidajat', 
+                     '@mikerouman', '@jimphelan', '@AlRobertson', '@dorasmith', 
+                     '@johnhfox', '@kesmit3', '@Bewator_Siemens', '@MollyHwa', 
+                     '@mike_atkins', '@renezahradnik', '@susanpelley', '@BBoswell1', 
+                     '@uk_dave', '@baumvogel', '@jsarfati', '@rajahc', '@martinnoskovic', 
+                     '@JasonPeel2', '@annieroberts1', '@janeshart', '@SavvasVerdis', 
+                     '@redwind11', '@SoutherlyBreeze', '@stenmic', '@RMFranke', 
+                     '@SiemensSensors', '@SiemensAfrica', '@Siemens_DT_US', '@siemensindia', 
+                     '@Siemens_CNC_US', '@SiemensHealthIT', '@SiemensStiftung', 
+                     '@HeatherMachado', '@SiemensinCanada', '@Stephane_Chayer', 
+                     '@Siemens_IA_NL', '@Robert_Hardt', '@caring_hands', '@sfoundation', 
+                     '@SiemensHealth', '@SiemensBT', '@siemensindustry', '@TimG_SmartGrid', 
+                     '@Siemens_SG', '@Siemens_Ptbo', '@SiemensAnswers', '@SiemensPLM', 
+                     '@SiemensUKNews', '@siemens_press', '@USautomation', '@SiemensCities', 
+                     '@Siemens', '@SiemensII', '@SiemensUSA', '@Siemens_Energy', 
+                     '@SiemensSensors', '@SiemensPLM_JP', '@Siemens_ARG', '@siemensindia'])
     
     keywords_siemens = ['siemens']
     
@@ -317,8 +335,8 @@ if __name__ == '__main__':
 #    print 'Saving seed ids...'
 #    json.dump(list(id_seeds), open('seed_ids_siemens.json','w'), indent=2)
 
-    account_seeds = account_seeds_ubisoft
-    keywords = keywords_ubisoft
+    account_seeds = account_seeds_siemens
+    keywords = keywords_siemems
         
     
 
