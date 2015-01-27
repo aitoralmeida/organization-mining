@@ -24,9 +24,9 @@ CONFIG_FILEPATH = './confs/twitter.json'
 NETWORKS_FILEPATH = './networks/'
 STATUS_FILEPATH = './ongoing_crawls/'
 
-MAX_NON_EMPLOYEES_PROCESSED = 3000
+MAX_NON_EMPLOYEES_PROCESSED = 4000
 MIN_PRIORITY = 1
-SEED_PRIORITY = 15
+SEED_PRIORITY = 30
 BASE_PRIORITY = 1
 WAIT_MINS = 5
 
@@ -247,7 +247,9 @@ def build_graph(collected_ids):
         
 if __name__ == '__main__':
     print 'Starting...'
-    #for siemens
+    
+    #****************************** SIEMENS ***********************************
+    
     account_seeds_siemens = set(['@MichaelStal', '@darko_anicic', '@geri_revay', '@janinakugel', 
                      '@dubey_harishch', '@RosaRiera', '@ericspiegel', '@PauloRStark',
                      '@Krejman', '@Juergen_Maier', '@PekkoL', '@EHelminen', '@KatarinaNurmi1',
@@ -279,9 +281,15 @@ if __name__ == '__main__':
                      '@Siemens_SG', '@Siemens_Ptbo', '@SiemensAnswers', '@SiemensPLM', 
                      '@SiemensUKNews', '@siemens_press', '@USautomation', '@SiemensCities', 
                      '@Siemens', '@SiemensII', '@SiemensUSA', '@Siemens_Energy', 
-                     '@SiemensSensors', '@SiemensPLM_JP', '@Siemens_ARG', '@siemensindia'])
+                     '@SiemensSensors', '@SiemensPLM_JP', '@Siemens_ARG', 
+                     '@siemensindia' ,'@VincentThornley', '@DBGeach', '@DarrenGarbett',
+                     '@nigekirby', '@emmawhitaker', '@PhilBanksVSD', '@SueBagguley',
+                     '@JoHensher', '@Siemens_RailUK', '@Mish_78', '@galling_nigel', 
+                     '@Dan_L_Walker', '@MarkGJenkinson', '@silkethomson'])
     
     keywords_siemens = ['siemens']
+    
+    #****************************** UBISOFT ***********************************
     
     account_seeds_ubisoft = set(['@UbiGabe', '@UbiXander', '@aemond', '@matwillem', 
                                  '@Harpax', '@borbok', '@BDRAnneLewis', '@Mat_TheDuke', 
@@ -321,6 +329,33 @@ if __name__ == '__main__':
     
     keywords_ubisoft = ['ubisoft']
     
+    
+    #********************************** luxoft *******************************
+    
+    account_seeds_luxoft = set(['@luxoft', '@TrainingLuxoft', '@Twister_Luxoft', 
+                                '@Luxoft_Jobs', '@CakeFromLuxoft', '@Mariya_luxoft', 
+                                '@pberendt', '@LuxoftPoland', '@leonid_efremov', 
+                                '@dimafirsov', '@ayakima', '@dminkova1', '@Luxoftagency', 
+                                '@TesterLuxoft', '@step2zero', '@Dr_P_Watson', 
+                                '@ArtemKulyk', '@RIP212'])
+    
+    keywords_luxoft = ['luxoft']
+    
+    #****************************** Fiserv ***********************************
+    
+    account_seeds_fiserv = set(['@Fiserv', '@Fiserv_CU', '@FiservCareers', '@FISVPROUD', 
+                                '@mobimelissa', '@jimtobincan', '@wadec2', '@jill_kuhlman', 
+                                '@TheRaddonReport', '@OpenSolutionsCC', '@NZAndyParker', 
+                                '@FPKohler', '@jaxsully', '@cherylnash2', '@tbo11', 
+                                '@PeceJ', '@msieve', '@davidcarrNZ', '@ditispatrick', 
+                                '@Fiserv_Amanda', '@FiservMk', '@Ujjwal_Fiserv', 
+                                '@TirdadShojaie', '@DC_ClientServs', '@PaulSeamon', 
+                                '@tally_hall', '@orthmpdx', '@NZAndyParker', 
+                                '@MaryBrutovski', '@rahulgupta999', '@Cash_Logistics', 
+                                '@jimtobincan'])
+    
+    keywords_fiserv = ['fiserv']
+    
 #    keywords = set(['Siemens', 'siemens', 'SiemensPLM', 'Siemens_Ptbo', 'SiemensPLM_BNL',
 #                'SiemensHealthIT', 'Siemens_Traffic', 'SiemensPLM_DE', 'SiemensPLM_JP', 
 #                'Siemens_Ptbo', 'Siemens_DT_US', 'SiemensMobility', 'RollingOnRails', 
@@ -336,7 +371,7 @@ if __name__ == '__main__':
 #    json.dump(list(id_seeds), open('seed_ids_siemens.json','w'), indent=2)
 
     account_seeds = account_seeds_siemens
-    keywords = keywords_siemems
+    keywords = keywords_siemens
         
     
 
