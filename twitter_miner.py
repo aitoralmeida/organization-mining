@@ -102,8 +102,11 @@ def get_ids_from_screen_names(screen_names):
     ids = set()
     for screen_name in screen_names:
         print ' - %s' % screen_name
-        user = api.get_user(screen_name.strip())
-        ids.add(user.id_str)
+        try:
+            user = api.get_user(screen_name.strip())
+            ids.add(user.id_str)
+        except:
+            print 'Error recovering the id'
     return ids    
     
 # Crawls twitter searching for organization X employees. 
@@ -356,6 +359,33 @@ if __name__ == '__main__':
     
     keywords_fiserv = ['fiserv']
     
+    
+    #****************************** Accenture *********************************
+    
+    account_seeds_accenture = set(['@Accenture', '@AccentureSocial', '@ISpeakAnalytics', 
+                                   '@AccentureIndia', '@Accenture_Jobs', '@AccentureHiTech', 
+                                   '@MobilityWise', '@AccentureRetail', '@AccentureCloud', 
+                                   '@AccentureDigi', '@accenturelabs', '@AccentureMedia', 
+                                   '@AccentureComms', '@BankingInsights', '@AccentureFed', 
+                                   '@AccentureAero', '@accenture_ca', '@accentureukjobs', 
+                                   '@AccentureTech', '@AccentureStrat', '@AccentureHealth', 
+                                   '@AccenturePubSvc', '@AccentureRugby', '@AccentureFrance', 
+                                   '@prithbanerjee', '@mjbiltz', '@justinkeeble',
+                                   '@JillHuntley1', '@jessicalongdev', '@arthurhanna', 
+                                   '@AccentureJobsCr', '@SRaycroft', '@AccentureEnergy', 
+                                   '@AccentureJobsCl', '@AccentureASEAN', '@Accenture_MX', 
+                                   '@AccentureSAjobs', '@Accenture_DK', '@accenture_br', 
+                                   '@AccentureDACH', '@Sandervtn', '@pauldaugh', 
+                                   '@AccentureJobsAR', '@fjord', '@AccenturePubSvc', '@AccentureGrid', 
+                                   '@Accenture_ID', '@AccentureDigi', '@AccentureSpain', 
+                                   '@Accenture_TR', '@GarethDJWilson', '@GillyBryant', 
+                                   '@michaelcostonis', '@AccentureStrat', '@AccentureCapMkt', 
+                                   '@jill_inglis', '@jortpossel', '@markpmcdonald', 
+                                   '@Hartmanglen', '@AccentureCloud', '@MikeSutcliff', 
+                                   '@apabbatielloHR'])
+    
+    keywords_accenture  = ['accenture']
+    
 #    keywords = set(['Siemens', 'siemens', 'SiemensPLM', 'Siemens_Ptbo', 'SiemensPLM_BNL',
 #                'SiemensHealthIT', 'Siemens_Traffic', 'SiemensPLM_DE', 'SiemensPLM_JP', 
 #                'Siemens_Ptbo', 'Siemens_DT_US', 'SiemensMobility', 'RollingOnRails', 
@@ -366,17 +396,17 @@ if __name__ == '__main__':
 #                'siemensindustry', 'SiemensUKNews', 'SiemensTurkiye', 'Siemens_Brasil'])
                 
 #    print 'Recovering ids...'
-#    id_seeds = get_ids_from_screen_names(account_seeds)
+#    id_seeds = get_ids_from_screen_names(account_sdeeds)
 #    print 'Saving seed ids...'
 #    json.dump(list(id_seeds), open('seed_ids_siemens.json','w'), indent=2)
 
-    account_seeds = account_seeds_siemens
-    keywords = keywords_siemens
+    account_seeds = account_seeds_accenture
+    keywords = keywords_accenture
         
     
 
     
-    SEED_ID_FILE = 'seed_ids_siemens.json'
+    SEED_ID_FILE = 'seed_ids.json'
     try:
         print 'Loading ids...'
         id_seeds = json.load(open(SEED_ID_FILE,'r'))
